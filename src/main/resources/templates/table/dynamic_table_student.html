@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common::commonheader(~{::title})">
+
+    <title>学生信息表</title>
+</head>
+
+<body class="sticky-header">
+
+<section>
+    <!-- left side start-->
+    <div th:replace="common::leftside"></div>
+    <!-- left side end-->
+
+    <!-- main content start-->
+    <div class="main-content">
+
+        <!-- header section start-->
+        <div th:replace="common::headerside"></div>
+        <!-- header section end-->
+
+        <!-- page heading start-->
+        <div class="page-heading">
+            <h3>
+                学生信息表
+            </h3>
+            <ul class="breadcrumb">
+                <li>
+                    <a href="#">Dashboard</a>
+                </li>
+                <li>
+                    <a href="#">Data Tables</a>
+                </li>
+                <li class="active"> 学生信息表</li>
+            </ul>
+        </div>
+        <!-- page heading end-->
+
+        <!--body wrapper start-->
+        <div class="wrapper">
+            <div class="row">
+                <div class="col-sm-12">
+                    <section class="panel">
+
+                        <header class="panel-heading">
+                            动态表格(自定义)
+
+
+                            <span class="tools pull-right">
+                <a href="javascript:;" class="fa fa-chevron-down"></a>
+                <a href="javascript:;" class="fa fa-times"></a>
+             </span>
+                            <div style="padding-top: 20px;padding-bottom:10px">
+                                <form role="form" th:action="@{/dynamic_table_student}" method="post">
+                                    学号:<input name="id" style="width: 70px;display: inline" type="text"
+                                              class="form-control" placeholder="学号">
+                                    姓名:<input name="name" style="width: 100px;display: inline" type="text"
+                                              class="form-control" placeholder="姓名">
+                                    年龄:<input name="age" style="width: 70px;display: inline" type="text"
+                                              class="form-control" placeholder="年龄">
+                                    分数:<input name="score" style="width: 70px;display: inline" type="text"
+                                              class="form-control" placeholder="分数">
+                                    地址:<input name="addr" style="width: 150px;display: inline" type="text"
+                                              class="form-control" placeholder="地址">
+                                    电话:<input name="phone" style="width: 150px;display: inline" type="text"
+                                              class="form-control" placeholder="电话">
+                                    <!--以下是准备做性别的下拉选择的-->
+                                    <!--<div class="btn-group open">
+                                        <input class="btn btn-default" type="button"></input>
+                                        &lt;!&ndash;下拉按钮&ndash;&gt;
+                                        <button data-toggle="dropdown" class="btn btn-default dropdown-toggle" type="button">
+                                            <span class="caret"></span>
+                                            <span class="sr-only">Toggle Dropdown</span>
+                                        </button>
+                                        <ul role="menu" class="dropdown-menu">
+                                            <li><a href="#">男</a></li>
+                                            <li><a href="#">女</a></li>
+
+                                        </ul>
+                                    </div>-->
+                                    <button style="width: 100px;margin-bottom:1px " class="btn btn-success"
+                                            type="submit">学生查找
+                                    </button>
+                                </form>
+                            </div>
+                            <div style="padding-top: 20px;padding-bottom:10px; color: #1fb5ac">
+                                <form role="form" th:action="@{/dynamic_table_class}" method="post">
+                                    班级号:<input name="classxId" style="width: 100px;display: inline" type="text"
+                                               class="form-control" placeholder="班级号">
+                                    班级名称:<input name="classxName" style="width: 150px;display: inline" type="text"
+                                                class="form-control" placeholder="班级名称">
+
+                                    <button style="width: 100px;margin-bottom:1px;color: #1fb5ac "
+                                            class="btn btn-primary" type="submit">班级查找
+                                    </button>
+                                </form>
+                            </div>
+                            <label ><a th:href="@{/testPageHelper1}">分页测试</a></label>
+                        </header>
+
+                        <div class="panel-body">
+                            <div class="adv-table">
+                                <table class="display table table-bordered table-striped" id="dynamic-table">
+                                    <thead>
+                                    <tr style="color:mediumvioletred">
+                                        <th>#</th>
+                                        <th>学号</th>
+                                        <th>姓名</th>
+                                        <th>年龄</th>
+                                        <th>分数</th>
+                                        <th>班级</th>
+                                        <th>地址</th>
+                                        <th>电话</th>
+                                        <th>父亲名字</th>
+                                        <th>母亲名字</th>
+                                        <th>父亲工作</th>
+                                        <th>母亲工作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr style="color:black" th:each="student,state : ${pageInfo.list}">
+                                        <th th:text="${state.count}">#</th>
+                                        <th th:text="${student.id}">学号</th>
+                                        <th th:text="${student.name}">姓名</th>
+                                        <th th:text="${student.age}">年龄</th>
+                                        <th th:text="${student.score}">分数</th>
+                                        <th th:text="${student.classx.classxName}">班级</th>
+                                        <th th:text="${student.addr}">地址</th>
+                                        <th th:text="${student.phone}">电话</th>
+                                        <th th:text="${student.fatherName}">父亲名字</th>
+                                        <th th:text="${student.motherName}">母亲名字</th>
+                                        <th th:text="${student.fatherJob}">父亲工作</th>
+                                        <th th:text="${student.motherJob}">母亲工作</th>
+                                    </tr>
+                                    </tbody>
+                                    <tfoot>
+                                    <tr style="color:mediumvioletred">
+                                    <tr style="color:mediumvioletred">
+                                        <th>#</th>
+                                        <th>学号</th>
+                                        <th>姓名</th>
+                                        <th>年龄</th>
+                                        <th>分数</th>
+                                        <th>班级</th>
+                                        <th>地址</th>
+                                        <th>电话</th>
+                                        <th>父亲名字</th>
+                                        <th>母亲名字</th>
+                                        <th>父亲工作</th>
+                                        <th>母亲工作</th>
+                                    </tr>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                                <!--分页div-->
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="dataTables_info" id="editable-sample_info">当前第 [[${pageInfo.pageNum}]]页，
+                                            共[[${pageInfo.pages}]]页，
+                                            一共[[${pageInfo.total}]]条记录
+                                        </div>
+                                        <!--分页通过下拉框选择每页显示的个数-->
+                                        <div id="dynamic-table_length" class="dataTables_length">
+                                            <label>
+                                                <select
+                                                        class="form-control" size="1" name="dynamic-table_length"
+                                                        aria-controls="dynamic-table">
+                                                    <option value="3" th:selected="${pageInfo.pageSize==3}">3</option>
+                                                    <option value="5" th:selected="${pageInfo.pageSize==5 }">5</option>
+                                                    <option value="10" th:selected="${pageInfo.pageSize==10}">10</option>
+                                                    <option value="20" th:selected="${pageInfo.pageSize==20}">20</option>
+
+                                                </select>
+                                                每页显示的条数
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-6">
+                                        <div class="dataTables_paginate paging_bootstrap pagination">
+                                            <!--直接跳到某一页-->
+                                            <div style="padding-top: 30px">
+                                                到第<input style="width: 50px" name="pn" id="pn_input" th:value="${param.pageNum}">页
+                                                <input id="searchPageBtn" style="width: 80px" type="button"  value="确定">
+                                                <div>
+                                            <ul>
+                                                <li th:if="${pageInfo.hasPreviousPage}"><a class="first_page" th:href="@{/testPageHelper1(pageNum=1)}">首页</a></li>
+                                                <li class="prev" th:if="${pageInfo.hasPreviousPage}">
+                                                    <a class="pre_a" th:href="@{/testPageHelper1(pageNum=${pageInfo.prePage})}">← 上一页</a>
+                                                </li>
+                                                <!--遍历条数,pageNo位所有页码的序列号,${pageNo}<=5页面序列号小于5个才显示-->
+                                                <li th:class="${pageNo==pageInfo.pageNum?'active':'' }" th:each="pageNo:${#numbers.sequence(1,pageInfo.pages)}"
+                                                th:if="${pageNo}<=5">
+                                                    <a th:class="pageNum_a" th:href="@{/testPageHelper1(pageNum=${pageNo})}" th:text="${pageNo}"></a>
+                                                </li>
+
+
+                                                <li class="next" th:if="${pageInfo.hasNextPage}">
+                                                    <a class="next_a" th:href="'/testPageHelper1?pageNum='+${pageInfo.nextPage}" >下一页 → </a>
+
+                                                </li>
+                                                <li th:if="${pageInfo.hasNextPage}"><a class="last_page" th:href="@{/testPageHelper1(pageNum=${pageInfo.pages})}">尾页</a></li>
+
+
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--显示分页信息第二种方式-->
+                                <!--<div class="modal-footer no-margin-top">
+                                    <div class="col-md-6">
+                                        当前第 [[${pageInfo.pageNum}]]页,共 [[${pageInfo.pages}]] 页.一共 [[${pageInfo.total}]] 条记录
+                                    </div>
+
+                                    <ul class="pagination pull-right no-margin">
+                                        <li th:if="${pageInfo.hasPreviousPage}">
+                                           &lt;!&ndash; <a th:href="'/testPageHelper1?pageNum=1'">首页</a>&ndash;&gt;
+                                            <a th:href="@{/testPageHelper1(pageNum=1)}">首页</a>
+                                        </li>
+
+                                        <li class="prev" th:if="${pageInfo.hasPreviousPage}">
+                                            <a th:href="@{/testPageHelper1(pageNum=${pageInfo.prePage}) }">
+                                                <i class="ace-icon fa fa-angle-double-left"></i>
+                                            </a>
+                                        </li>
+                                        &lt;!&ndash;遍历条数&ndash;&gt;
+                                        <li th:each="num:${pageInfo.navigatepageNums}">
+                                            &lt;!&ndash;<a th:href="'/testPageHelper1?pageNum='+${nav}" th:text="${nav}" th:if="${nav != pageInfo.pageNum}"></a>&ndash;&gt;
+                                            <a th:href="@{/testPageHelper1(pageNum=${num})}" th:text="${num}" th:if="${num != pageInfo.pageNum}"></a>
+
+                                            <span style="font-weight: bold;background: #6faed9;" th:if="${num == pageInfo.pageNum}" th:text="${num}" ></span>
+                                        </li>
+
+                                        <li class="next" th:if="${pageInfo.hasNextPage}">
+                                            <a th:href="@{'/testPageHelper1?pageNum='+${pageInfo.nextPage}}">
+                                                <i class="ace-icon fa fa-angle-double-right"></i>
+                                            </a>
+                                        </li>
+
+                                        <li th:if="${pageInfo.hasNextPage}">
+                                            <a th:href="'/testPageHelper1?pageNum='+${pageInfo.pages}">尾页</a>
+                                        </li>
+                                    </ul>
+                                </div>-->
+
+                                        <div style="display: none">
+                                <div>当前页号：<span th:text="${pageInfo.pageNum}"></span></div>
+                                <div>每页条数：<span th:text="${pageInfo.pageSize}"></span></div>
+                                <div>起始行号：<span th:text="${pageInfo.startRow}"></span></div>
+                                <div>终止行号：<span th:text="${pageInfo.endRow}"></span></div>
+                                <div>总结果数：<span th:text="${pageInfo.total}"></span></div>
+                                <div>总页数：<span th:text="${pageInfo.pages}"></span></div>
+                                <hr />
+                                <div>是否为第一页：<span th:text="${pageInfo.isFirstPage}"></span></div>
+                                <div>是否为最后一页：<span th:text="${pageInfo.isLastPage}"></span></div>
+                                <div>是否有前一页：<span th:text="${pageInfo.hasPreviousPage}"></span></div>
+                                <div>是否有下一页：<span th:text="${pageInfo.hasNextPage}"></span></div>
+                                        </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+        </div>
+
+        <footer>
+            2014 &copy; AdminEx by ThemeBucket
+        </footer>
+        <!--footer section end-->
+
+
+    </div>
+    <!-- main content end-->
+</section>
+
+<div th:replace="common::commonscript"></div>
+
+<!--dynamic table-->
+<!--<script type="text/javascript" language="javascript" th:src="@{/js/advanced-datatable/js/jquery.dataTables.js}"></script>
+<script type="text/javascript" th:src="@{/js/data-tables/DT_bootstrap.js}"></script>-->
+<!--dynamic table initialization -->
+<!--<script th:src="@{/js/dynamic_table_init.js}"></script>-->
+
+<!--定位到多少页-->
+<script>
+    $(function () {
+        $("#searchPageBtn").click(function () {
+            var inputPageNum = $("#pn_input").val();
+            var pageSize = $(".dataTables_length option:selected").val();
+
+            location.href="/testPageHelper1?pageNum="+(inputPageNum)+"&pageSize="+pageSize;
+            window.event.returnValue=false;
+        });
+    });
+</script>
+<!--下拉框选择分页pageSize发送请求-->
+<script type="text/javascript">
+    $(".dataTables_length").change(function(){
+        //两个分页的参数，一个默认是第一页，一个是每页的显示条数
+        var pageSize = $(".dataTables_length option:selected").val();
+
+        location.href="/testPageHelper1?pageNum=1" +"&pageSize="+pageSize;
+        window.event.returnValue=false;
+    });
+</script>
+<!--点分页多少条的时候发送一个新的地址栏，带两个参数，一个是当前页码，一个是每页显示的条数-->
+<script type="text/javascript" th:inline="javascript">
+
+    $(".pageNum_a").click(function () {
+
+        //获取每页的条数.当条目数被选中的时候，我们取值
+        var pageSize = $(".dataTables_length option:selected").val();
+        //$(this).text()获取当前遍历中的页码。
+        var pageNum = $(this).text();
+
+        //alert(pageNum);
+        //alert(pageSize);
+        location.href="/testPageHelper1?pageNum="+pageNum+"&pageSize="+pageSize;
+        window.event.returnValue=false;
+    });
+
+    //上一页和下一页的连接点击
+
+    $(".pre_a").click(function(){
+        //使用这种方式获取pageInfo中的信息
+        var pageNum = [[${pageInfo.pageNum}]];
+        //获取每页的条数
+        var pageSize = $(".dataTables_length option:selected").val();
+        alert(pageNum-1);
+        alert(pageSize);
+        location.href="/testPageHelper1?pageNum="+(pageNum-1)+"&pageSize="+pageSize;
+        window.event.returnValue=false;
+    });
+    $(".next_a").click(function(){
+        //使用这种方式获取pageInfo中的信息
+        var pageNum = [[${pageInfo.pageNum}]];
+
+        var pageSize =  $(".dataTables_length option:selected").val();
+        alert(pageNum+1);
+        alert(pageSize);
+        location.href="/testPageHelper1?pageNum="+(pageNum+1)+"&pageSize="+pageSize;
+        window.event.returnValue=false;
+    });
+    //首页和尾页的链接
+
+    $(".first_page").click(function () {
+        var pageNum = 1;
+        var pageSize = $(".dataTables_length option:selected").val();
+        location.href="/testPageHelper1?pageNum="+(pageNum)+"&pageSize="+pageSize;
+        window.event.returnValue=false;
+    });
+    $(".last_page").click(function () {
+        var pageNum=[[${pageInfo.pages}]];
+        var pageSize = $(".dataTables_length option:selected").val();
+        alert(pageNum);
+        alert(pageSize);
+
+        location.href="/testPageHelper1?pageNum="+(pageNum)+"&pageSize="+pageSize;
+        window.event.returnValue=false;
+    });
+
+</script>
+
+</body>
+</html>

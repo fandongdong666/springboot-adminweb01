@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common::commonheader(~{::title})">
+
+  <title>Dynamic Table</title>
+</head>
+
+<body class="sticky-header">
+
+<section>
+    <!-- left side start-->
+    <div th:replace="common::leftside"></div>
+    <!-- left side end-->
+    
+    <!-- main content start-->
+    <div class="main-content" >
+
+        <!-- header section start-->
+        <div th:replace="common::headerside"></div>
+        <!-- header section end-->
+
+        <!-- page heading start-->
+        <div class="page-heading">
+            <h3>
+                高级表格
+            </h3>
+            <ul class="breadcrumb">
+                <li>
+                    <a href="#">Dashboard</a>
+                </li>
+                <li>
+                    <a href="#">Data Tables</a>
+                </li>
+                <li class="active">  高级表格 </li>
+            </ul>
+        </div>
+        <!-- page heading end-->
+
+        <!--body wrapper start-->
+        <div class="wrapper">
+        <div class="row">
+        <div class="col-sm-12">
+        <section class="panel">
+        <header class="panel-heading">
+            动态表格(js写好的表格初始化等)
+            <span class="tools pull-right">
+                <a href="javascript:;" class="fa fa-chevron-down"></a>
+                <a href="javascript:;" class="fa fa-times"></a>
+             </span>
+        </header>
+        <div class="panel-body">
+        <div class="adv-table">
+        <table  class="display table table-bordered table-striped" id="dynamic-table">
+        <thead>
+        <tr style="color:mediumvioletred">
+            <th>#</th>
+            <th>ID</th>
+            <th>用户名</th>
+            <th class="hidden-phone">邮箱</th>
+            <th class="hidden-phone">性别</th>
+            <th class="hidden-phone">部门</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="gradeX" th:each="emp,state : ${emps}">
+            <th th:text="${state.count}">#</th>
+            <th th:text="${emp.id}">ID</th>
+            <th th:text="${emp.lastName}">用户名</th>
+            <th th:text="${emp.email}" class="hidden-phone">邮箱</th>
+            <th th:text="${emp.gender=='1'}?'男':'女' " class="hidden-phone">性别</th>
+            <th th:text="${emp.dept.getDeptName}" class="hidden-phone">部门</th>
+        </tr>
+
+        </tbody>
+        <tfoot>
+        <tr style="color:mediumvioletred">
+            <th>#</th>
+            <th>ID</th>
+            <th>用户名</th>
+            <th class="hidden-phone">邮箱</th>
+            <th class="hidden-phone">性别</th>
+            <th class="hidden-phone">部门</th>
+        </tr>
+        </tfoot>
+        </table>
+        </div>
+        </div>
+        </section>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-sm-12">
+        <section class="panel">
+        <!--<header class="panel-heading">
+            自定义的数据表员工emp表格(不使用js进行表单初始化)
+            <span class="tools pull-right">
+                <a href="javascript:;" class="fa fa-chevron-down"></a>
+                <a href="javascript:;" class="fa fa-times"></a>
+             </span>
+
+
+        </header>-->
+        <!--<div class="panel-body">
+        <div class="adv-table">
+        <table class="display table table-bordered" id="hidden-table-info">
+        <thead>
+        <tr style="color:mediumvioletred">
+            <th>#</th>
+            <th>ID</th>
+            <th>用户名</th>
+            <th class="hidden-phone">邮箱</th>
+            <th class="hidden-phone">性别</th>
+            <th class="hidden-phone">部门</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="gradeX" th:each="emp,state : ${emps}">
+            <th th:text="${state.count}">#</th>
+            <th th:text="${emp.id}">ID</th>
+            <th th:text="${emp.lastName}">用户名</th>
+            <th th:text="${emp.email}" class="hidden-phone">邮箱</th>
+            <th th:text="${emp.gender=='1'}?'男':'女' " class="hidden-phone">性别</th>
+            <th th:text="${emp.dept.getDeptName}" class="hidden-phone">部门</th>
+        </tr>
+
+        </tbody>
+        </table>
+
+        </div>
+        </div>-->
+        </section>
+        </div>
+        </div>
+        </div>
+        <!--body wrapper end-->
+
+        <!--body wrapper start-->
+
+        <!--body wrapper end-->
+        <!--footer section start-->
+        <footer>
+            2014 &copy; AdminEx by ThemeBucket
+        </footer>
+        <!--footer section end-->
+
+
+    </div>
+    <!-- main content end-->
+</section>
+
+<div th:replace="common::commonscript"></div>
+
+<!--dynamic table-->
+<script type="text/javascript" language="javascript" th:src="@{/js/advanced-datatable/js/jquery.dataTables.js}"></script>
+<script type="text/javascript" th:src="@{/js/data-tables/DT_bootstrap.js}"></script>
+<!--dynamic table initialization -->
+<script th:src="@{/js/dynamic_table_init.js}"></script>
+
+
+
+</body>
+</html>

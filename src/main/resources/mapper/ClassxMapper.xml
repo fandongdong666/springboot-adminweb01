@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fan.mapper.ClassxMapper">
+  <resultMap id="BaseResultMap" type="com.fan.domain.Classx">
+      <id column="classx_id" property="classxId"/>
+      <result column="classx_name" property="classxName"  />
+      <result column="classx_stunum" property="classxStunum" />
+      <result column="classx_addr" property="classxAddr"  />
+  </resultMap>
+
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    classx_id, classx_name, classx_stunum, classx_addr
+  </sql>
+  <!--********************************-->
+  <resultMap id="myClassx" type="com.fan.domain.Classx">
+    <id column="classx_id" property="classxId"/>
+    <result column="classx_name" property="classxName"  />
+    <result column="classx_stunum" property="classxStunum" />
+    <result column="classx_addr" property="classxAddr"  />
+    <!--封装实体类的最后一个属性集合-->
+    <collection property="students" ofType="com.fan.domain.Student"
+    column="classx_id" select="com.fan.mapper.StudentMapper.selectByOutKey">
+    </collection>
+  </resultMap>
+  <!--Classx selectClassXByClassx(Classx classx)-->
+  <select id="selectClassXByClassx" resultMap="myClassx">
+    select <include refid="Base_Column_List"></include>
+    from classx
+    <where>
+
+      <if test="classxName!=null and classxName!= '' ">
+       <bind name="classxName" value=" '%'+classxName+'%' "/>
+      </if>
+
+    <if test="classxId!=null">
+      and classx_id = #{classxId}
+    </if>
+     <if test="classxName!=null and classxName!= '' ">
+      and classx_name like #{classxName}
+     </if>
+    </where>
+  </select>
+  <!--*********************************-->
+  <select id="selectByExample" parameterType="com.fan.domain.ClassxExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from classx
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from classx
+    where classx_id = #{classxId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from classx
+    where classx_id = #{classxId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.fan.domain.ClassxExample">
+    delete from classx
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.fan.domain.Classx">
+    insert into classx (classx_id, classx_name, classx_stunum, 
+      classx_addr)
+    values (#{classxId,jdbcType=INTEGER}, #{classxName,jdbcType=VARCHAR}, #{classxStunum,jdbcType=INTEGER}, 
+      #{classxAddr,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fan.domain.Classx">
+    insert into classx
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="classxId != null">
+        classx_id,
+      </if>
+      <if test="classxName != null">
+        classx_name,
+      </if>
+      <if test="classxStunum != null">
+        classx_stunum,
+      </if>
+      <if test="classxAddr != null">
+        classx_addr,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="classxId != null">
+        #{classxId,jdbcType=INTEGER},
+      </if>
+      <if test="classxName != null">
+        #{classxName,jdbcType=VARCHAR},
+      </if>
+      <if test="classxStunum != null">
+        #{classxStunum,jdbcType=INTEGER},
+      </if>
+      <if test="classxAddr != null">
+        #{classxAddr,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.fan.domain.ClassxExample" resultType="java.lang.Long">
+    select count(*) from classx
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update classx
+    <set>
+      <if test="record.classxId != null">
+        classx_id = #{record.classxId,jdbcType=INTEGER},
+      </if>
+      <if test="record.classxName != null">
+        classx_name = #{record.classxName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.classxStunum != null">
+        classx_stunum = #{record.classxStunum,jdbcType=INTEGER},
+      </if>
+      <if test="record.classxAddr != null">
+        classx_addr = #{record.classxAddr,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update classx
+    set classx_id = #{record.classxId,jdbcType=INTEGER},
+      classx_name = #{record.classxName,jdbcType=VARCHAR},
+      classx_stunum = #{record.classxStunum,jdbcType=INTEGER},
+      classx_addr = #{record.classxAddr,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fan.domain.Classx">
+    update classx
+    <set>
+      <if test="classxName != null">
+        classx_name = #{classxName,jdbcType=VARCHAR},
+      </if>
+      <if test="classxStunum != null">
+        classx_stunum = #{classxStunum,jdbcType=INTEGER},
+      </if>
+      <if test="classxAddr != null">
+        classx_addr = #{classxAddr,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where classx_id = #{classxId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fan.domain.Classx">
+    update classx
+    set classx_name = #{classxName,jdbcType=VARCHAR},
+      classx_stunum = #{classxStunum,jdbcType=INTEGER},
+      classx_addr = #{classxAddr,jdbcType=VARCHAR}
+    where classx_id = #{classxId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fan.mapper.StudentMapper">
+  <resultMap id="Mystudent" type="com.fan.domain.Student">
+    <id column="id" property="id"></id>
+    <result column="name" property="name"></result>
+    <result column="age" property="age"></result>
+    <result column="score" property="score"></result>
+    <result column="addr" property="addr"></result>
+    <result column="phone" property="phone"></result>
+    <result column="father_name" property="fatherName"></result>
+    <result column="mother_name" property="motherName"></result>
+    <result column="father_job" property="fatherJob"></result>
+    <result column="mother_job" property="motherJob"></result>
+  </resultMap>
+  <resultMap id="Mystudent2" type="com.fan.domain.Student">
+    <id column="id" property="id"></id>
+    <result column="name" property="name"></result>
+    <result column="age" property="age"></result>
+    <result column="score" property="score"></result>
+    <result column="addr" property="addr"></result>
+    <result column="phone" property="phone"></result>
+    <result column="father_name" property="fatherName"></result>
+    <result column="mother_name" property="motherName"></result>
+    <result column="father_job" property="fatherJob"></result>
+    <result column="mother_job" property="motherJob"></result>
+    <!--封装一个对象-->
+    <association column="classc_id" property="classx" select="com.fan.mapper.ClassxMapper.selectByPrimaryKey"></association>
+  </resultMap>
+  <!--就把基本的字段进行封装-->
+  <sql id="Base_Column_List">
+    id, name, age, score, addr, phone,father_name,
+    mother_name,father_job,mother_job,classc_id
+  </sql>
+<!--*******************-->
+  <select id="selectPageVo" resultMap="Mystudent2">
+    SELECT * FROM student WHERE state=#{state}
+</select>
+  <!--分页测试-->
+  <select id="queryStudentInfo" resultMap="Mystudent2">
+    select <include refid="Base_Column_List"></include>
+    from student
+
+  </select>
+  <!--Student selectStuAndClassById(Integer id)-->
+  <select id="selectStuAndClassById" resultMap="Mystudent2">
+    select <include refid="Base_Column_List"></include>
+    from student
+    <where>
+      <if test="id!=null ">
+        and id = #{id}
+      </if>
+    </where>
+  </select>
+  <!--Student selectByOutKey(Integer id)-->
+  <select id="selectByOutKey" resultMap="Mystudent2">
+    select <include refid="Base_Column_List" />
+    from student
+    where classc_id = #{classc_id}
+  </select>
+  <!--List<Student> selectStuAndClassByStu(Student student)-->
+  <select id="selectStuAndClassByStu" resultMap="Mystudent2">
+    select <include refid="Base_Column_List"></include>
+    from student
+    <where>
+    <if test="name!=null">
+      <bind name="name" value=" '%'+name+'%' "/>
+    </if>
+      <if test="addr!=null and addr!='' ">
+        <bind name="addr" value=" '%'+addr+'%' "/>
+      </if>
+      <if test="phone!=null and phone!='' ">
+        <bind name="phone" value=" '%'+phone+'%' "/>
+      </if>
+      <if test="fatherName!=null and fatherName!='' ">
+        <bind name="fatherName" value=" '%'+fatherName+'%' "/>
+      </if>
+      <if test="motherName!=null and motherName!='' ">
+        <bind name="motherName" value=" '%'+motherName+'%' "/>
+      </if>
+
+      <if test="id!=null ">
+        and id = #{id}
+      </if>
+      <if test="name!=null and name!='' ">
+        and name like #{name}
+      </if>
+      <if test="age!=null">
+        and age = #{age}
+      </if>
+      <if test="score!=null">
+        and score = #{score}
+      </if>
+      <if test="addr!=null and addr!='' ">
+        and addr like #{addr}
+      </if>
+      <if test="phone!=null and phone!='' ">
+        and phone like #{phone}
+      </if>
+      <if test="fatherName!=null and fatherName!='' ">
+        and father_name like #{fatherName}
+      </if>
+      <if test="motherName!=null and motherName!='' ">
+        and mother_name like #{motherName}
+      </if>
+    </where>
+  </select>
+<!--*******************-->
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="Mystudent">
+    select 
+    <include refid="Base_Column_List" />
+    from student
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from student
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.fan.domain.Student">
+    insert into student (id, name, age
+      )
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.fan.domain.Student">
+    insert into student
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="age != null">
+        age,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null">
+        #{age,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fan.domain.Student">
+    update student
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null">
+        age = #{age,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fan.domain.Student">
+    update student
+    set name = #{name,jdbcType=VARCHAR},
+      age = #{age,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+</mapper>

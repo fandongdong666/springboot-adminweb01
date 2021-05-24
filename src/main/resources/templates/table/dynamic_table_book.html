@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common::commonheader(~{::title})">
+
+    <title>图书信息表</title>
+
+</head>
+
+<body class="sticky-header">
+<section>
+    <!-- left side start-->
+    <div th:replace="common::leftside"></div>
+    <!-- left side end-->
+
+    <!-- main content start-->
+    <div class="main-content">
+
+        <!-- header section start-->
+        <div th:replace="common::headerside"></div>
+        <!-- header section end-->
+
+        <!-- page heading start-->
+        <div class="page-heading">
+            <h3>
+                图书信息表
+            </h3>
+            <ul class="breadcrumb">
+                <li>
+                    <a href="#">Dashboard</a>
+                </li>
+                <li>
+                    <a href="#">Data Tables</a>
+                </li>
+                <li class="active"> 图书信息表</li>
+            </ul>
+        </div>
+        <!-- page heading end-->
+
+        <!--body wrapper start-->
+        <div class="wrapper">
+            <div class="row">
+                <div class="col-sm-12">
+                    <section class="panel">
+
+                        <header class="panel-heading">
+                            动态表格(自定义)
+
+
+                            <span class="tools pull-right">
+                <a href="javascript:;" class="fa fa-chevron-down"></a>
+                <a href="javascript:;" class="fa fa-times"></a>
+             </span>
+                            <div style="padding-top: 20px;padding-bottom:10px">
+                                <!--<form role="form" th:action="@{/dynamic_table_student}" method="post">
+                                    学号:<input name="id" style="width: 70px;display: inline" type="text"
+                                              class="form-control" placeholder="学号">
+                                    姓名:<input name="name" style="width: 100px;display: inline" type="text"
+                                              class="form-control" placeholder="姓名">
+                                    年龄:<input name="age" style="width: 70px;display: inline" type="text"
+                                              class="form-control" placeholder="年龄">
+                                    分数:<input name="score" style="width: 70px;display: inline" type="text"
+                                              class="form-control" placeholder="分数">
+                                    地址:<input name="addr" style="width: 150px;display: inline" type="text"
+                                              class="form-control" placeholder="地址">
+                                    电话:<input name="phone" style="width: 150px;display: inline" type="text"
+                                              class="form-control" placeholder="电话">
+                                    &lt;!&ndash;以下是准备做性别的下拉选择的&ndash;&gt;
+                                    &lt;!&ndash;<div class="btn-group open">
+                                        <input class="btn btn-default" type="button"></input>
+                                        &lt;!&ndash;下拉按钮&ndash;&gt;
+                                        <button data-toggle="dropdown" class="btn btn-default dropdown-toggle" type="button">
+                                            <span class="caret"></span>
+                                            <span class="sr-only">Toggle Dropdown</span>
+                                        </button>
+                                        <ul role="menu" class="dropdown-menu">
+                                            <li><a href="#">男</a></li>
+                                            <li><a href="#">女</a></li>
+
+                                        </ul>
+                                    </div>&ndash;&gt;
+                                    <button style="width: 100px;margin-bottom:1px " class="btn btn-success"
+                                            type="submit">学生查找
+                                    </button>
+                                </form>-->
+                            </div>
+                            <div style="padding-top: 20px;padding-bottom:10px; color: #1fb5ac">
+                                <!--<form role="form" th:action="@{/dynamic_table_class}" method="post">
+                                    班级号:<input name="classxId" style="width: 100px;display: inline" type="text"
+                                               class="form-control" placeholder="班级号">
+                                    班级名称:<input name="classxName" style="width: 150px;display: inline" type="text"
+                                                class="form-control" placeholder="班级名称">
+
+                                    <button style="width: 100px;margin-bottom:1px;color: #1fb5ac "
+                                            class="btn btn-primary" type="submit">班级查找
+                                    </button>
+                                </form>-->
+                            </div>
+                        </header>
+
+                        <div class="panel-body">
+                            <!--<a id="insertBook_a" style="float: right;margin: 10px" class="btn btn-primary" type="button">新增图书</a>-->
+                            <!--隐藏的表单,这里使用模态框-->
+                            <!-- Button trigger modal -->
+                            <!--动态查询-->
+                            <div style="float:left;padding-top: 20px;padding-bottom:10px; color: #1fb5ac">
+                                <form role="form" th:action="@{/book/bookPageByPrice}" method="get">
+                                    价格:<input id="min_price" name="min" style="width: 85px;display: inline" type="text" th:value="${param.min}"
+                                               class="form-control" placeholder="最小价格">
+                                    元——<input id="max_price" name="max" style="width: 85px;display: inline" type="text" th:value="${param.max}"
+                                                class="form-control" placeholder="最大价格">元
+
+                                    <button style="width: 100px;margin-bottom:1px;color: #1fb5ac "
+                                            class="btn btn-primary" type="submit">查找
+                                    </button>
+                                </form>
+                            </div>
+                            <button id="insert_open" style="margin: 10px;float: right" type="button" class="btn btn-primary btn-lg" >
+                                新增图书
+                            </button>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="myModalLabel">新增图书</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form id="layer_form" action="" method="post" style="" >
+                                                <div class="title">
+                                                    <h2 id="form_h2">新增图书</h2>
+                                                    <a onclick="layer.style.display=none"></a>
+                                                </div>
+                                                <div style="width: auto;margin-left: 150px;margin-right: 150px">
+                                                    <!--重置表单-->
+                                                    <input type="reset" hidden />
+                                                    <input type="hidden" id="hiddenid" name="id" />
+                                                    <input type="hidden" id="hiddenpageNum" name="pageNum" th:value="${page.pages}" />
+                                                    <p><label>名称: </label><input type="input" id="name" name="name"  /></p>
+                                                    <p><label>价格: </label><input type="input" name="price" /></p>
+                                                    <p><label>作者: </label><input type="input" name="author" /></p>
+                                                    <p><label>销量: </label><input type="input" name="sales" /></p>
+                                                    <p><label>库存: </label><input type="input" name="stock" /></p> <br>
+                                                    <!--th:value="${book!=null}?${book.stock}:'' "-->
+                                                    <button id="btnSave"   style="margin-left: 70px;width: 80px" class="btn btn-success" type="submit" />保存</a>
+                                                </div>
+
+
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                            <!--<button type="button" class="btn btn-primary">保存</button>-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="adv-table">
+                                <table class="display table table-bordered table-striped" id="dynamic-table">
+                                    <thead>
+                                    <tr style="color:mediumvioletred;vertical-align:middle;text-align:center;">
+                                        <th>#</th>
+                                        <th>名称</th>
+                                        <th>价格</th>
+                                        <th>作者</th>
+                                        <th>销量</th>
+                                        <th>库存</th>
+                                        <th style="vertical-align: center">操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr style="color:black" th:each="book,state : ${page.getRecords()}">
+                                        <th th:text="${state.count}">#</th>
+                                        <th th:text="${book.name}">名称</th>
+                                        <th th:text="${book.price}">价格</th>
+                                        <th th:text="${book.author}">作者</th>
+                                        <th th:text="${book.sales}">销量</th>
+                                        <th th:text="${book.stock}">库存</th>
+                                        <th >
+                                            <!--@{/book/updateBook(id=${book.id})}-->
+                        <!--                    <a    style="margin-left: 30px"
+                                                class="btn btn-primary update_a" type="buttom"  onclick="edit(${book.id})">
+                                                修改
+                                            </a >-->
+                                            <a type="button"  class="btn btn-success update_a" th:onclick="openUpdateModal([[${book.id}]] )"  >修改</a>
+                                                <!--       th:onclick="edit([[${book.id}]])"           -->
+                                            <a th:href="@{/book/deleteById(id=${book.id},pageNum=${page.current}) }" style="margin-left: 30px" class="btn btn-danger" type="button">删除</a>
+                                        </th>
+                                    </tr>
+                                    </tbody>
+                                    <tfoot>
+                                    <tr style="color:mediumvioletred">
+
+                                        <th>#</th>
+                                        <th>名称</th>
+                                        <th>价格</th>
+                                        <th>作者</th>
+                                        <th>销量</th>
+                                        <th>库存</th>
+                                        <th>操作</th>
+                                    </tr>
+
+                                    </tfoot>
+                                </table>
+                                <!--分页div-->
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="dataTables_info" id="editable-sample_info">当前第 [[${page.current}]]页，
+                                            共[[${page.pages}]]页，
+                                            一共[[${page.total}]]条记录
+                                        </div>
+                                        <!--分页通过下拉框选择每页显示的个数-->
+                                        <div id="dynamic-table_length" class="dataTables_length">
+                                            <label>
+                                                <select
+                                                        class="form-control" size="1" name="dynamic-table_length"
+                                                        aria-controls="dynamic-table">
+                                                    <option value="3" th:selected="${page.size==3}">3</option>
+                                                    <option value="5" th:selected="${page.size==5 }">5</option>
+                                                    <option value="10" th:selected="${page.size==10}">10</option>
+                                                    <option value="20" th:selected="${page.size==20}">20</option>
+
+                                                </select>
+                                                每页显示的条数
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-6">
+                                        <div class="dataTables_paginate paging_bootstrap pagination">
+                                            <!--直接跳到某一页-->
+                                            <div style="padding-top: 30px">
+                                                到第<input style="width: 50px" name="pn" id="pn_input" th:value="${param.pageNum}">页
+                                                <input id="searchPageBtn" style="width: 80px" type="button"  value="确定">
+                                                <div>
+                                                    <ul>
+                                                        <li th:if="${page.hasPrevious()}"><a id="first_page" th:href="@{/book/dynamic_table_bookPage(pageNum=1)}">首页</a></li>
+
+                                                        <li class="prev" th:if="${page.hasPrevious()}">
+                                                            <a class="pre_a" th:href="@{/book/dynamic_table_bookPage(pageNum=${page.current} - 1)}">← 上一页</a>
+                                                        </li>
+                                                        <!--遍历条数,pageNo位所有页码的序列号,${pageNo}<=5页面序列号小于5个才显示-->
+                                                        <li th:class="${pageNo==page.current?'active':'' }" th:each="pageNo:${#numbers.sequence(1,page.pages)}"
+                                                            ><!--th:if="${pageNo}<=5"  , -->
+                                                            <a th:class="pageNum_a" th:href="@{/book/dynamic_table_bookPage(pageNum=${pageNo})}" th:text="${pageNo}"></a>
+                                                        </li>
+
+
+                                                        <li class="next" th:if="${page.hasNext()}">
+                                                            <!--th:href="'/dynamic_table_bookPage?pageNum='+(${page.current} +1)"-->
+                                                            <a th:href="'/book/dynamic_table_bookPage?pageNum='+(${page.current} +1)" id="next_a"  >下一页 → </a>
+
+                                                        </li>
+                                                        <li th:if="${page.hasNext()}"><a class="last_page" th:href="@{/book/dynamic_table_bookPage(pageNum=${page.pages})}">尾页</a></li>
+
+
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                    </section>
+                </div>
+            </div>
+
+        </div>
+
+        <footer>
+            2014 &copy; AdminEx by ThemeBucket
+        </footer>
+        <!--footer section end-->
+
+
+    </div>
+    <!-- main content end-->
+</section>
+
+<div th:replace="common::commonscript"></div>
+
+<!--dynamic table-->
+<!--<script type="text/javascript" language="javascript" th:src="@{/js/advanced-datatable/js/jquery.dataTables.js}"></script>
+<script type="text/javascript" th:src="@{/js/data-tables/DT_bootstrap.js}"></script>-->
+<!--dynamic table initialization -->
+<!--<script th:src="@{/js/dynamic_table_init.js}"></script>-->
+
+<!--*********-->
+
+<!--定位到多少页-->
+
+
+<script type="text/javascript" th:inline="javascript">
+//打开新增模态框
+    $("#insert_open").click(function () {
+        alert("打开新增表单");
+        //重置表单
+        $('#layer_form')[0].reset();//重置表单
+        $("#myModalLabel").text("新增图书");
+
+        //设置表单的action
+        $("#layer_form").prop("action","/book/insertBook");
+        //弹出模态框
+        $("#myModal").modal('show');
+    });
+</script>
+<!--修改模态框-->
+<script>
+function openUpdateModal(id) {
+
+    alert("myid:" + id);
+    //重置表单
+    $('#layer_form')[0].reset();//重置表单
+    $("#myModalLabel").text("修改图书");
+    //设置模态框的action，设置属性和值：$(selector).prop(property,value)
+    var pageNum = [[${page.current}]];
+    $("#layer_form").prop("action", "/book/updateBook?pageNum="+pageNum);
+    //数据回填
+    $.post(
+        "/book/selectById",
+        {id:id},
+        function (jsonData) {
+            loadDatatoForm("layer_form", jsonData);
+        },
+        "json"
+    );
+    //回填完后弹出模态框
+    $("#myModal").modal('show');
+
+}
+</script>
+<!--加载json数据到表格-->
+<script >
+    /*回填controller返回的json数据到form表单，将前天数据以json格式返回， @ResponseBody： return book;*/
+    function loadDatatoForm(fromId, jsonDate) {
+        var obj = jsonDate;
+        var key, value, tagName, type, arr;
+        for (x in obj) {
+            key = x;
+            value = obj[x];
+            $("#" + fromId + " [name='" + key + "'],#" + fromId + " [name='" + key + "[]']").each(function () {
+                tagName = $(this)[0].tagName;
+                type = $(this).attr('type');
+                if (tagName == 'INPUT') {
+                    if (type == 'radio') {
+                        $(this).attr('checked', $(this).val() == value);
+                    } else if (type == 'checkbox') {
+                        try {
+                            arr = value.split(',');
+                            for (var i = 0; i < arr.length; i++) {
+                                if ($(this).val() == arr[i]) {
+                                    $(this).attr('checked', true);
+                                    break;
+                                }
+                            }
+                        } catch (e) {
+                            $(this).attr('checked', value);
+                        }
+                    } else {
+                        $(this).val(value);
+                    }
+                } else if (tagName == 'TEXTAREA') {
+                    $(this).val(value);
+                } else if (tagName == 'SELECT') {
+                    if ($(this).hasClass("select2")) {
+                        $(this).val(value).trigger("change");
+                    } else {
+                        $(this).val(value);
+                    }
+
+                }
+
+            });
+        }
+
+    }
+
+</script>
+
+
+<!--分页有关的js-->
+<script type="text/javascript" th:inline="javascript">
+    //首页
+    $("#first_page").click(function () {
+        var pageNum = 1;
+        var pageSize = $(".dataTables_length option:selected").val();
+        var min_price = $("#min_price").val();
+        alert(min_price);
+        var max_price = $("#max_price").val();
+        location.href="/book/bookPageByPrice?pageNum="+(pageNum)+"&pageSize="+pageSize+"&max="+max_price+"&min="+min_price;
+        window.event.returnValue=false;
+    });
+    //上一页
+    $(".pre_a").click(function () {
+
+        var pageNum = [[${page.current}]] ;
+        var pageSize = $(".dataTables_length option:selected").val();
+        var min_price = $("#min_price").val();
+        //alert(min_price);
+        var max_price = $("#max_price").val();
+
+        location.href="/book/bookPageByPrice?pageNum="+(pageNum)+"&pageSize="+pageSize+"&max="+max_price+"&min="+min_price;
+        window.event.returnValue=false;
+    });
+    //每一个页码：
+    $(".pageNum_a").click(function () {
+        var pageNum = $(this).text();
+        var pageSize = $(".dataTables_length option:selected").val();
+        var min_price = $("#min_price").val();
+        //alert(min_price);
+        var max_price = $("#max_price").val();
+
+        location.href="/book/bookPageByPrice?pageNum="+(pageNum)+"&pageSize="+pageSize+"&max="+max_price+"&min="+min_price;
+        window.event.returnValue=false;
+    });
+    /*下一页*/
+    $("#next_a").click(function () {
+
+        var pageNum = [[${page.current}]] ;
+        var pageSize = $(".dataTables_length option:selected").val();
+
+        var min_price = $("#min_price").val();
+        //alert(min_price);
+        var max_price = $("#max_price").val();
+
+        location.href="/book/bookPageByPrice?pageNum="+(pageNum)+"&pageSize="+pageSize+"&max="+max_price+"&min="+min_price;
+        window.event.returnValue=false;
+    });
+    //尾页
+    $(".last_page").click(function () {
+        var pageNum = [[${page.pages}]];
+        var pageSize = $(".dataTables_length option:selected").val();
+        var min_price = $("#min_price").val();
+        //alert(min_price);
+        var max_price = $("#max_price").val();
+
+        location.href="/book/bookPageByPrice?pageNum="+(pageNum)+"&pageSize="+pageSize+"&max="+max_price+"&min="+min_price;
+        window.event.returnValue=false;
+    });
+</script>
+<!--下拉框选择分页pageSize发送请求-->
+<script type="text/javascript">
+    $(".dataTables_length").change(function(){
+        //两个分页的参数，一个默认是第一页，一个是每页的显示条数
+        var pageSize = $(".dataTables_length option:selected").val();
+
+        var min_price = $("#min_price").val();
+        //alert(min_price);
+        var max_price = $("#max_price").val();
+
+        location.href="/book/bookPageByPrice?pageNum="+(1)+"&pageSize="+pageSize+"&max="+max_price+"&min="+min_price;
+        window.event.returnValue=false;
+    });
+</script>
+</body>
+</html>

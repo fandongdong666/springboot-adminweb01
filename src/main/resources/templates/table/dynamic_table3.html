@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common::commonheader(~{::title})">
+
+    <title>订单信息表</title>
+</head>
+
+<body class="sticky-header">
+
+<section>
+    <!-- left side start-->
+    <div th:replace="common::leftside"></div>
+    <!-- left side end-->
+
+    <!-- main content start-->
+    <div class="main-content">
+
+        <!-- header section start-->
+        <div th:replace="common::headerside"></div>
+        <!-- header section end-->
+
+        <!-- page heading start-->
+        <div class="page-heading">
+            <h3>
+                高级表格
+            </h3>
+            <ul class="breadcrumb">
+                <li>
+                    <a href="#">Dashboard</a>
+                </li>
+                <li>
+                    <a href="#">Data Tables</a>
+                </li>
+                <li class="active"> 高级表格</li>
+            </ul>
+        </div>
+        <!-- page heading end-->
+
+        <!--body wrapper start-->
+        <div class="wrapper">
+            <div class="row">
+                <div class="col-sm-12">
+                    <section class="panel">
+
+                        <header class="panel-heading">
+                            动态表格(自定义)
+
+
+                            <span class="tools pull-right">
+                <a href="javascript:;" class="fa fa-chevron-down"></a>
+                <a href="javascript:;" class="fa fa-times"></a>
+             </span>
+                            <div style="padding-top: 20px;padding-bottom:10px">
+                                <form role="form" th:action="@{/dynamic_table3}" method="post">
+                                    id:<input name="id" disabled style="width: 50px;display: inline" type="text"
+                                              class="form-control" placeholder="id">
+                                    姓名:<input name="lastName" disabled style="width: 100px;display: inline" type="text"
+                                              class="form-control" placeholder="姓名">
+                                    邮箱:<input name="email" disabled style="width: 150px;display: inline" type="text"
+                                              class="form-control" placeholder="邮箱">
+                                    性别:<input name="gender" disabled style="width: 100px;display: inline" type="text"
+                                              class="form-control" placeholder="男或者女">
+                                    <!--以下是准备做性别的下拉选择的-->
+                                    <!--<div class="btn-group open">
+                                        <input class="btn btn-default" type="button"></input>
+                                        &lt;!&ndash;下拉按钮&ndash;&gt;
+                                        <button data-toggle="dropdown" class="btn btn-default dropdown-toggle" type="button">
+                                            <span class="caret"></span>
+                                            <span class="sr-only">Toggle Dropdown</span>
+                                        </button>
+                                        <ul role="menu" class="dropdown-menu">
+                                            <li><a href="#">男</a></li>
+                                            <li><a href="#">女</a></li>
+
+                                        </ul>
+                                    </div>-->
+                                    部门:<input id="deptNameId" name="deptName" style="width: 150px;display: inline" type="text"
+                                              class="form-control" placeholder="部门">
+                                    <!--提交分页的当前页码-->
+                                    <input type="hidden" name="pageNum" value="1">
+                                    <button style="width: 100px;margin-bottom:1px " class="btn btn-success"
+                                            type="submit">查找
+                                    </button>
+                                </form>
+                            </div>
+                        </header>
+
+                        <div class="panel-body">
+                            <div class="adv-table">
+                                <table class="display table table-bordered table-striped" id="dynamic-table">
+                                    <thead>
+                                    <tr style="color:mediumvioletred">
+                                        <th>#</th>
+                                        <th>ID</th>
+                                        <th>用户名</th>
+                                        <th class="hidden-phone">邮箱</th>
+                                        <th class="hidden-phone">性别</th>
+                                        <th class="hidden-phone">部门</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr class="gradeX" th:each="emp,state: ${pageInfo.list}">
+
+                                        <th th:text="${state.count}">#</th>
+                                        <th th:text="${emp.id}">ID</th>
+                                        <th th:text="${emp.lastName}">用户名</th>
+                                        <th th:text="${emp.email}" class="hidden-phone">邮箱</th>
+                                        <th th:text="${emp.gender=='1'}?'男':'女' " class="hidden-phone">性别</th>
+                                        <th th:text="${emp.dept.deptName}" class="hidden-phone">部门</th>
+
+                                    </tr>
+
+                                    </tbody>
+                                    <tfoot>
+                                    <tr style="color:mediumvioletred">
+                                        <th>#</th>
+                                        <th>ID</th>
+                                        <th>用户名</th>
+                                        <th class="hidden-phone">邮箱</th>
+                                        <th class="hidden-phone">性别</th>
+                                        <th class="hidden-phone">部门</th>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                                <div class="row-fluid">
+                                    <div class="span6">
+                                        <div class="dataTables_info" id="dynamic-table_info">当前第[[${pageInfo.pageNum}]]页
+                                            ,总共[[${pageInfo.pages}]]页
+                                            ,总共[[${pageInfo.total}]]条记录
+                                        </div>
+                                    </div>
+                                    <!--分页通过下拉框选择每页显示的个数-->
+                                    <div id="dynamic-table_length" class="dataTables_length">
+                                        <label>
+                                            <select
+                                                    class="form-control" size="1" name="dynamic-table_length"
+                                                    aria-controls="dynamic-table">
+
+                                                <option value="5" th:selected="${pageInfo.pageSize==5 }">5</option>
+                                                <option value="10" th:selected="${pageInfo.pageSize==10}">10</option>
+                                                <option value="20" th:selected="${pageInfo.pageSize==20}">20</option>
+                                                <option value="100" th:selected="${pageInfo.pageSize==100}">100</option>
+                                            </select>
+                                            每页显示的条数
+                                        </label>
+                                    </div>
+                                    <div class="span6">
+                                        <div class="dataTables_paginate paging_bootstrap pagination">
+
+                                            <ul class="pagination pull-right no-margin">
+                                                <!--首页和尾页不需要class标签,显示首页条件：有上一页才显示首页，同样，有上一页才显示上一页
+            逻辑判断的是当前页大于第一页（ 即如果已经是第一页，则不显示上一页和首页）-->
+                                                <li  th:if="${pageInfo.hasPreviousPage}"><a th:href="@{'/dynamic_table3?pageNum=1'} ">首页</a></li>
+
+                                                <li class="prev " th:if="${pageInfo.hasPreviousPage}"><a th:href="@{'/dynamic_table3?pageNum='+${pageInfo.prePage}}">← Previous</a></li>
+                                                <!--#numbers.sequence(1,pageInfo.pages)生成一个从第一页到最后一页的总数列号-->
+                                              <!--  <li th:each="pageNo:${#numbers.sequence(1,pageInfo.pages)}" th:if="${pageNo} <= 5 ">
+                                                    &lt;!&ndash;th:text="${num}"：a标签显示的值，pageNum=${num}请求参数的值是便签显示的值&ndash;&gt;
+                                                    <a href="@{ '/dynamic_table3?pageNum=' +${pageNo} }" th:text="${pageNo}"></a>
+                                                </li>-->
+                                                <li  th:class="${pageNo==pageInfo.pageNum?'active':''} " th:each="pageNo:${#numbers.sequence(1,pageInfo.pages)}"
+                                                    th:if="${pageNo} <= 5 ">
+                                                    <!--th:text="${num}"：a标签显示的值，pageNum=${num}请求参数的值是便签显示的值-->
+                                                    <a class="a_pageNum" th:href="@{'/dynamic_table3?pageNum='+${pageNo} }"
+                                                       th:text="${pageNo}"></a>
+                                                </li>
+                                                <!--首页和尾页不需要class标签,显示首页条件：有上一页才显示首页，同样，有上一页才显示上一页，
+                                                本质是如果已经是最后一页，则不显示下一页和尾页-->
+                                                <li class="next" th:if="${pageInfo.hasNextPage}">
+                                                    <a th:href="@{'/dynamic_table3?pageNum='+${pageInfo.nextPage}}">Next → </a>
+                                                </li>
+                                                <li  th:if="${pageInfo.hasNextPage}"><a th:href="@{'/dynamic_table3?pageNum='+${pageInfo.pages}}">尾页</a></li>
+                                            </ul>
+
+
+                                            <!--直接跳到某一页-->
+                                            <div style="padding-top: 30px">
+                                            到第<input style="width: 50px" name="pn" id="pn_input" th:value="${param.pageNum}">页
+                                            <input id="searchPageBtn" style="width: 80px" type="button"  value="确定">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+        </div>
+
+        <footer>
+            2014 &copy; AdminEx by ThemeBucket
+        </footer>
+        <!--footer section end-->
+
+
+    </div>
+    <!-- main content end-->
+</section>
+
+
+<!--<div th:replace="common :: commonscript"></div>-->
+
+<!--dynamic table-->
+<!--<script type="text/javascript" language="javascript" th:src="@{/js/advanced-datatable/js/jquery.dataTables.js}"></script>
+<script type="text/javascript" th:src="@{/js/data-tables/DT_bootstrap.js}"></script>-->
+<!--dynamic table initialization -->
+<!--<script th:src="@{/js/dynamic_table_init.js}"></script>-->
+<!-- Placed js at the end of the document so the pages load faster -->
+<script th:src="@{/js/jquery-1.10.2.min.js}"></script>
+<script th:src="@{/js/jquery-ui-1.9.2.custom.min.js}"></script>
+<script th:src="@{/js/jquery-migrate-1.2.1.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/modernizr.min.js}"></script>
+<script th:src="@{/js/jquery.nicescroll.js}"></script>
+
+<!--common scripts for all pages-->
+<script th:src="@{/js/scripts.js}"></script>
+
+<!--下拉框选择分页pageSize发送请求-->
+<script type="text/javascript">
+    $(".dataTables_length").change(function(){
+        var pageSize = $(".dataTables_length option:selected").val();
+        // <a class="a_pageNum" th:value="${nav}"通过这种方法将每一页的页码取到了
+        //var pageNum = $(".a_pageNum").val();
+
+        /*  alert(pageNum);
+          alert(pageSize);*/
+
+        location.href="/dynamic_table3?pageNum=1" +"&pageSize="+pageSize;
+
+    });
+</script>
+<!--点击页码条的时候发送一个新的地址栏，带两个分页参数的-->
+<script type="text/javascript" th:inline="javascript">
+    $(".a_pageNum").click(function () {
+        var pageSize = $(".dataTables_length option:selected").val();
+        var pageNum = $(this).text();
+
+        //alert(pageNum);
+        //alert(pageSize);
+        //alert(location.href);
+        location.href='/dynamic_table3?pageNum='+pageNum+'&pageSize='+pageSize;
+        window.event.returnValue=false;
+    });
+</script>
+<!--定位到多少页的js-->
+<script >
+    $(function () {
+        //跳到指定的页码
+        $("#searchPageBtn").click(function () {
+            //alert(location.href);
+            var inputPageNum = $("#pn_input").val();
+           var total=[[${pageInfo.total}]];
+           alert(total);
+            //地址栏参数的变化：相当于放松了一个请求：
+            location.href="/dynamic_table3?pageNum="+inputPageNum;
+        });
+    });
+</script>
+</body>
+</html>
